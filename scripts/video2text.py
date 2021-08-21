@@ -54,11 +54,33 @@ async def sound2text(uri_server: str, filename: str) -> list:
             answer = json.loads(await websocket.recv())
             fragment = answer.get('text', False)
             if fragment and fragment!="":
+                print(fragment)
                 text.append(fragment)
         await websocket.send('{"eof" : 1}')
         await websocket.recv()
         return text
 
+
+def sound2text_wa(uri_server: str, filename: str) -> list:
+    """ Транскрибация аудио в текст с помощью VOKS-API """
+    text = []
+    video_path = filename + '.mp4'
+    audio_path = filename + '.wav'
+    async with websockets.connect(uri_server) as websocket:
+        wf = open(audio_path, "rb")
+        while True:
+            data = wf.read(8192)
+            if len(data) == 0:
+                break
+            await websocket.send(data)
+            answer = json.loads(await websocket.recv())
+            fragment = answer.get('text', False)
+            if fragment and fragment!="":
+                print(fragment)
+                text.append(fragment)
+        await websocket.send('{"eof" : 1}')
+        await websocket.recv()
+        return text
 
 def text2file(filename: str, text: list):
     """ Сохраняем результат в тексовый файл

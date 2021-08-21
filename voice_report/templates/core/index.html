@@ -1,0 +1,121 @@
+{% extends 'core/base.html' %}
+
+{% block main %}
+<main>
+    <div class="container pt-3">
+        <div class="row">
+            <div class="col-md-7 col-12 order-2 order-md-1">
+                <h3>Список совещаний</h3>
+                <table class="table table-borderless protocol-tableList">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="date-table">Дата</th>
+                        <th scope="col">Тема</th>
+                        <th scope="col">Статус</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for meeting in meetings %}
+                    <tr id="protocol_{{ meeting.id }}" data-id={{ meeting.id }} class="protocol_item">
+                        <td class="date-table">{{ meeting.date }}</td>
+                        <td>{{ meeting.theme }}</td>
+                        <td>{% if meeting.status == 0 %}
+                            <span class="status_check text-center d-block">Проверка</span>
+                            {% endif %}
+                            {% if meeting.status == 1 %}
+                            <span class="status_ready text-center d-block">Готово</span>
+                            {% endif %}
+                            {% if meeting.status == 2 %}
+                            <span class="status_sogl text-center d-block">На согласовании</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 order-1 col-md-5 order-md-2">
+                <h5 class="header-detail p-4 mb-0">Детальная информация</h5>
+                <div class="row">
+                    <div class="col-12 col-md-12 p-3 mt-0 info_block">
+                        <div class="row d-none" id="control-protocol">
+                            <div class="col-12 border-bottom pb-3">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a href=""
+                                           class="d-block text-decoration-none disabled-btn btn btn-light"  id="view"><i
+                                                class="fas fa-money-check"></i> Просмотр </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="" class="d-block text-decoration-none btn btn-light"  id="print"><i
+                                                class="fas fa-print"></i> Распечатать</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-12 mt-3">
+                                <div class="row">
+                                    <div class="col-6">
+                                       
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#sendProtocolModal" class="d-block text-decoration-none btn btn-light">
+                                            <i class="far fa-paper-plane"></i> Участникам
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#sendEmailModal" class="d-block text-decoration-none btn btn-light"><i
+                                                class="far fa-paper-plane"></i> По email</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row" id="pick_protocol">
+                            <div class="col-12">
+                                <p>Пожалуйста выберите запись слева</p>
+                            </div>
+                        </div>
+                        {% for meeting in meetings %}
+                        <div class="row info_block_message mt-4 d-none" id="info_{{ meeting.id }}">
+                            <div class="col-12">
+                                <ul class="list-unstyled mt-4 font-400">
+                                    <li><span class="info_block_title d-block">Дата:</span>{{ meeting.date }}</li>
+                                    <li>
+                                        <span class="info_block_title d-block mt-2">Тема:</span>
+                                        {{ meeting.theme }}
+                                    </li>
+
+                                    <li><span class="info_block_title d-block mt-2">Повестка: </span>{{ meeting.agenda }}
+                                    </li>
+                                    <li>
+                                        <span class="info_block_title d-block mt-2">Участники:</span>
+                                        <ul class="list-unstyled mt-2">
+                                            {% for user in meeting.roles_in_meeting.all %}
+                                            {% if user.role.name == "Председательствующий" %}
+                                            <li>
+                                                {{ user.role }} – {{ user.employee.get_short_name }}
+                                            </li>
+                                            {% endif %}
+                                            {% if user.role.name == "Секретарь" %}
+                                            <li>
+                                                {{ user.role }} – {{ user.employee.get_short_name }}
+                                            </li>
+                                            {% endif %}
+                                            {% endfor %}
+                                            <li class="item-unstl mt-2">Присутствовали</li>
+                                            {% for user in meeting.roles_in_meeting.all %}
+                                            <li>{{ user.employee.get_short_name }} - {{ user.employee.place }};</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

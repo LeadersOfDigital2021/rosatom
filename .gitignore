@@ -130,3 +130,7 @@ dmypy.json
 /VoiceReport.iml
 /example/
 /.idea/
+/model/
+/scripts/
+/voice_report/media/
+/scripts/
