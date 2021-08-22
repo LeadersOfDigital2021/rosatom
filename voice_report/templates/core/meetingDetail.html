@@ -1,0 +1,236 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block main %}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 d-flex justify-content-end">
+                <a href="" class="btn btn-light btn-primary-our " data-bs-toggle="modal"
+                   data-bs-target="#SendProtocolModal"><i class="fas fa-check-double"></i> Подтвердить</a>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-5 col-12 full-screen" id="protocol-body">
+                <div class="protocol-view  p-3">
+                    <div class="bg-grey px-3 d-flex justify-content-between">
+                        <h5 class="header-protocol">Протокол от {{ meeting.date }}</h5>
+                        <a href="" onclick="javascript:fullScreenProtocol()"><span
+                                class="icon expend d-block mt-1 grey"></span></a>
+                    </div>
+                    <div class="protocol-main">
+                        <form class="row g-3 needs-validation protocol-form" novalidate method="POST" action="">
+
+                            <button class="btn btn-light btn-primary-our" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#protocol-head" aria-expanded="true" aria-controls="protocol-head">
+                                Шапка <i class="far fa-minus-square"></i>
+                            </button>
+                            <div class="protocol-head collapse show multi-collapse" id="protocol-head">
+                                <div class="col-md-12">
+                                    <div class="label-control d-flex justify-content-between">
+                                        <label for="exampleFormControlTextarea" class="form-label">Тема
+                                            совещания:</label>
+                                        <a href="#" class="btn-edit grey" onclick="editElm('#protocolTextTheme')"><i
+                                                class="fas fa-pen"></i></a>
+                                    </div>
+                                    <textarea class="form-control textarea-container" id="protocolTextTheme"
+                                              style="height: 147px;" disabled>{{meeting.theme}}</textarea>
+                                    <div class="valid-feedback">
+                                        Все хорошо
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Пожалуйста проверьте поле
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 col-12">
+                                    <label for="numberInput" class="form-label">Номер</label>
+                                    <input type="text" class="form-control edit-now" id="numberInput" placeholder=""
+                                           value="{{ meeting.num_protocol }}">
+                                </div>
+                            </div>
+                            <button class="btn btn-light btn-primary-our" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#protocol-member" aria-expanded="true"
+                                    aria-controls="protocol-member">
+                                Участники <i class="far fa-minus-square"></i>
+                            </button>
+                            <div class="protocol-member collapse multi-collapse show" id="protocol-member">
+                                <div class="col-12">
+                                    <div class="label-control d-flex justify-content-between">
+                                        <label for="protocol_predsed" class="form-label">Председательствующий</label>
+                                        <div class="protocol-controlMember">
+
+                                            <a href="#" class="btn-edit" onclick="editElm('#protocol_predsed')"><i
+                                                    class="fas fa-pen grey"></i></a>
+                                        </div>
+                                    </div>
+
+                                    {% for user_role in meeting.roles_in_meeting.all %}
+                                    {% if user_role.role == 2 %}
+                                    <input type="text" class="form-control" name="people-predsedatel"
+                                           id="protocol_predsed" value="{{user_role.employee.get_short_name}}"
+                                           placeholder="" disabled>{% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="col-12">
+                                    <div class="label-control d-flex justify-content-between">
+                                        <label for="peopleSekretar" class="form-label">Секретарь</label>
+                                        <a href="#" class="btn-edit" onclick="editElm('#peopleSekretar')"> <i
+                                                class="fas fa-pen grey"></i></a>
+                                    </div>
+
+                                    {% for user_role in meeting.roles_in_meeting.all %}
+                                    {% if user_role.role == 1 %}
+                                    <input type="text" class="form-control" name="people-sekretar" id="peopleSekretar"
+                                           value="{{user_role.employee.get_short_name}}" placeholder="">
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <!-- Вставить итератор на теги-->
+                                {% for user_role in meeting.roles_in_meeting.all %}
+                                <div class="col-12">
+                                    <div class="label-control d-flex justify-content-between">
+                                        <label for="peopleNumber{{ forloop.counter  }}" class="form-label">Участник №{{
+                                            forloop.counter }}</label>
+                                        <div class="control-member">
+                                            <a href="#"><i class="fas fa-user-slash grey"></i></a>
+                                            <a href="#" class="btn-edit"
+                                               onclick="editElm('#peopleNumber{{ forloop.counter  }}')"><i
+                                                    class="fas fa-pen grey"></i></a>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" disabled
+                                           name="peopleNumber{{ forloop.counter  }}"
+                                           id="peopleNumber{{ forloop.counter  }}"
+                                           value="{{user_role.employee.get_short_name}} - {{user_role.employee.place}}"
+                                           placeholder="">
+                                </div>
+                                {% endfor %}
+                                <div class="col-12 text-center py-5">
+                                    <a href="#" class="protocol_addMember"><i class="fas fa-user-plus"></i>Добавить
+                                        участника встречи</a>
+                                </div>
+                            </div>
+                            <button class="btn btn-light btn-primary-our" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#protocol-result" aria-expanded="true"
+                                    aria-controls="protocol-result">
+                                Повестка и решения <i class="far fa-minus-square"></i>
+                            </button>
+                            <div class="protocol-result collapse show" id="protocol-result">
+                                <div class="col-12 ">
+                                    <div class="label-control d-flex justify-content-between">
+                                        <label for="protocol_povestka" class="form-label">Повестка дня:</label>
+                                        <a href="#" class="btn-edit"><i class="far fa-edit grey"></i></a>
+                                    </div>
+
+                                    <input type="text" class="form-control" name="protocol_povestka"
+                                           id="protocol_povestka" value="{{ meeting.agenda }}" placeholder="">
+
+                                </div>
+
+                                <!--Итератор {1}{2}-->
+                                {% for solution in meeting.solutions.all %}
+                                <div class="col-12">
+                                    <div class="label-control d-flex justify-content-between">
+
+                                        <label for="protocol_itog_{{ forloop.counter }}" class="form-label">Решение №{{
+                                            forloop.counter }}</label>
+                                        <div>
+                                            <a href="#timestamp1938" data-name="timestamp1938"
+                                               class="btn-edit goTostr pl-3" title="Перейти к отрывку"><i
+                                                    class="fas fa-long-arrow-alt-right"></i></a>
+                                            <a href="#" class="btn-edit"><i class="far fa-edit"></i></a>
+                                        </div>
+                                    </div>
+
+                                    <textarea class="form-control textarea-container" disabled id="protocol_itog_1"
+                                              rows="3">{{ solution.solution }} </textarea>
+
+                                </div>
+                                {% endfor %}
+
+                                <div class="col-12 text-center py-5">
+                                    <a href="#" class="protocol_addMember"><i class="fas fa-file-medical"></i> Добавить
+                                        решение по встрече</a>
+                                </div>
+                            </div>
+                            <button class="btn btn-light btn-primary-our" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#protocol-trigger" aria-expanded="false"
+                                    aria-controls="protocol-trigger">
+                                Добавить фразы триггеры <i class="far fa-minus-square"></i>
+                            </button>
+                            <div class="protocol-trigger collapse" id="protocol-trigger">
+                                <div class="col-12">
+                                    <textarea name="trigger_frase" placeholder="Введите ключевые слова через запятую"
+                                              id="" cols="30" rows="5" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <button class="btn btn-ligt btn-success">Сохранить</button>
+                        </form>
+                    </div>
+                    <hr>
+                </div>
+
+            </div>
+            <div class="col-md-7 col-12">
+                <div class="log-view p-3">
+                    <h5 class="header-stenogramma px-3">Стенограмма совещания</h5>
+                    <div class="log-text p-3">
+                        <audio id="audio_player">
+                            <source src="{{ meeting.audio_file_mp3.url }}#t=7,17" type="audio/mpeg"/>
+                        </audio>
+                        {% for part in meeting.partitions.all %}
+                        <div>
+                            <div class="row editable_message mt-2">
+                                <div class="col-md-10" contenteditable="true">
+                                    {{ part.text }}
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="audio-time">
+                                        {{ part.get_start_time }} -
+                                        {{ part.get_end_time }}
+                                    </div>
+                                    <i class="fas fa-pen" aria-hidden="true"></i>
+                                    <a href="#" data-start-time="3"
+                                       data-end-time="7" class="play-audio-btn"><i class="fas fa-play-circle grey"></i></a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 text-center mt-3 d-none" id="timestamp{{ part.get_timestamp }}">
+                                    {% if forloop.counter == 1 %}
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+</main>
+<!--Модальные окна-->
+<div class="modal fade" id="SendProtocolModal" tabindex="-1" aria-labelledby="SendProtocolModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="SendProtocolModalLabel">Закончить редактирование протокола</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3 needs-validation" novalidate method="POST" action="">
+                    Внимание, после отправки протокола участникам, отредактировать его будет невозможно.
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Сохранить</button>
+                    <button type="button" class="btn btn-primary">Отправить участникам</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/view.js' %}"></script>
+{% endblock %}
+

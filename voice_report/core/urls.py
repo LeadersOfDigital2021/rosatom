@@ -1,28 +1,21 @@
-"""voice_report URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
 from django.urls import path
-from .views import AutenticationView, MainView, UploadVideoView
+from .views import AutenticationView, MainView, MeetingSend, MeetingPrintView, MeetingPrintExtView,\
+    AddMeettingView, LogoutView, NotFoundView, MeetingDetailView
 from django.conf import settings
 from django.conf.urls.static import static
+
+handler404 = "core.views.page_not_found_view"
 
 urlpatterns = [
     path('', MainView.as_view(), name='main'),
     path('auth', AutenticationView.as_view(), name='auth'),
-    path('upload', UploadVideoView.as_view(), name='upload'),
+    path('add_meeting', AddMeettingView.as_view(), name='add_meeting'),
+    path('404', NotFoundView.as_view(), name='404'),
+    path('logout', LogoutView.as_view(), name='logout'),
+    path('meeting_detail/<int:meeting_id>', MeetingDetailView.as_view(), name='view'),
+    path('meeting_print/<int:meeting_id>', MeetingPrintView.as_view(), name='view'),
+    path('meeting_print_ext/<str:uid>', MeetingPrintExtView.as_view(), name='view'),
+    path('meeting_send/<int:meeting_id>', MeetingSend.as_view(), name='view'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<apex:page standardController="Quote" renderAs="pdf" applyBodyTag="false">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Мирные утки</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+              crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/e2aadb1c88.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+              rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+                integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    </head>
+    <style>
+        div#water {
+            height: 100%;
+            width: 100%;
+            z-index: 10;
+            position: absolute;
+            display: block;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='200px' width='400px'><text x='15' y='30' fill='black' font-size='30' transform='translate(30) rotate(45 50 50)' fill-opacity='0.15'>{{ user.get_short_name }}</text></svg>");
+        }
+
+        @media print {
+            div#water {
+                height: 100%;
+                width: 100%;
+                z-index: -1;
+                position: absolute;
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='200px' width='400px'><text x='15' y='30' fill='black' font-size='30' transform='translate(30) rotate(45 50 50)' fill-opacity='0.15'>{{ user.get_short_name }}</text></svg>");
+            }
+    </style>
+
+    <body class="p-2 mail">
+    <div id="water"></div>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-12  text-center">
+                    <h2>Акционерное общество «ТВЭЛ»</h2>
+                    <h1>Протокол</h1>
+                    <p class="theme">совещания по архитектурному статусу проекта
+                        «Создание системы бизнес-планирования, бюджетирования, прогнозирования для обществ Топливной
+                        Компании» (код проекта – ТК-РВ-СРМ1-1)»</p>
+                </div>
+                <div class="col-12 d-flex justify-content-between">
+                    <span class="date border-bottom">
+                        26.02.2021
+                    </span>
+                    <span class="number border-bottom">
+                        10
+                    </span>
+                </div>
+                <div class="col-12 mt-2 text-center">
+                    <p>Москва</p>
+                </div>
+                <div class="col-12">
+                    <ul class="list-unstyled">
+                        <li><span>Председательствующий</span> - Ермилов А.А.</li>
+                        <li><span>Секретарь</span> - Василенко А.В.</li>
+                    </ul>
+                </div>
+                <div class="col-12">
+                    <p>Присутствовали</p>
+                    <ul>
+                        <li>Ермилов А.А. &ndash; руководитель проекта АО &laquo;ТВЭЛ&raquo;;</li>
+                        <li>Лебков В.В. &ndash; руководитель проекта АО &laquo;Гринатом&raquo;; &ndash; архитектор
+                            проекта АО &laquo;Гринатом&raquo;;
+                        </li>
+                        <li>Василенко А.В.&ndash; руководитель проекта АО &laquo;Гринатом&raquo;; &ndash; архитектор
+                            проекта АО &laquo;Гринатом&raquo;;
+                        </li>
+                        <li>Цатуров Г.А.&ndash; руководитель проекта АО &laquo;Гринатом&raquo;; &ndash; архитектор
+                            проекта АО &laquo;Гринатом&raquo;;
+                        </li>
+                        <li>Балакин А.Д.&ndash; руководитель проекта АО &laquo;Гринатом&raquo;; &ndash; архитектор
+                            проекта АО &laquo;Гринатом&raquo;;
+                        </li>
+                        <li>Маковецкий Н.&ndash; руководитель проекта АО &laquo;Гринатом&raquo;; &ndash; архитектор
+                            проекта АО &laquo;Гринатом&raquo;;
+                        </li>
+                        <li>Махарадзе В.В.&ndash; руководитель проекта АО &laquo;Гринатом&raquo;; &ndash; архитектор
+                            проекта АО &laquo;Гринатом&raquo;;
+                        </li>
+                        <li>Белоус П.М.&ndash; руководитель проекта АО &laquo;Гринатом&raquo;; &ndash; архитектор
+                            проекта АО &laquo;Гринатом&raquo;;
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-12">
+                    <p>ПОВЕСТКА ДНЯ:</p>
+                    <ul class="list-group-numbered">
+                        <li>Рассмотрение статуса проекта</li>
+                    </ul>
+                </div>
+                <div class="col-12">
+                    <p>ПРИНЯТЫЕ РЕШЕНИЯ</p>
+                    <ul class="list-group-numbered">
+                        <li>Формат документа «Запрос на изменения во внешних системах» предоставляет ТМ1.
+                            <ul>
+                                <li>Срок исполнения – 25.05.2021</li>
+                                <li>Ответственный: Большаков А.</li>
+                            </ul>
+                        </li>
+                        <li>Формат документа «Запрос на изменения во внешних системах» предоставляет ТМ1.
+                            <ul>
+                                <li>Срок исполнения – 25.05.2021</li>
+                                <li>Ответственный: Большаков А.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-12 d-flex justify-content-between">
+                    <span>Председательствующий</span>
+                    <span>А.А Ермилов</span>
+                </div>
+                <div class="col-12 mt-3 d-flex justify-content-between">
+                    <span>Секретарь</span>
+                    <span>А.В Василенко</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    </body>
+</html>

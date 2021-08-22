@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Group, Transcript, Meeting, EmployeeRole, EmployeeRolesInMeeting
+from .models import User, Group, Meeting, Solution, EmployeeRolesInMeeting, PartitionTranscript
 from django.contrib.auth.models import Group as default_group
 
-admin.site.unregister(default_group)
+
 
 
 class cUserAdmin(UserAdmin):
@@ -16,9 +16,10 @@ class cUserAdmin(UserAdmin):
     ordering = ['email']
 
 
+admin.site.unregister(default_group)
 admin.site.register(User, cUserAdmin)
 admin.site.register(Group)
-admin.site.register(Transcript)
+admin.site.register(PartitionTranscript)
 admin.site.register(Meeting)
-admin.site.register(EmployeeRole)
+admin.site.register(Solution)
 admin.site.register(EmployeeRolesInMeeting)

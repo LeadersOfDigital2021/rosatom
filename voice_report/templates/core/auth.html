@@ -19,14 +19,15 @@
 <main class="form-signin ">
     <form action="{% url 'auth' %}" method="POST">
         {% csrf_token %}
-        <img src="{% static 'img/2c5a0eab64ce68666597b1e9cd9addd4.png' %}" class="me-2" width="50px" alt="">
-        <h1 class="h3 mb-3 fw-normal">Вход</h1>
+        <img src="{% static 'img/else-01.png' %}" class="me-2 text-center" width="100%" alt="">
+
         <div class="form-floating">
-            <input type="email" class="form-control" id="floatingInput"  name="username" placeholder="name@example.com" value="{{username}}">
+            <input type="email" class="form-control" id="floatingInput" name="username" placeholder="name@example.com"
+                   value="{{username}}">
             <label for="floatingInput">Логин</label>
         </div>
         <div class="form-floating">
-            <input type="password" class="form-control" id="floatingPassword"   name="password"  placeholder="Password">
+            <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
             <label for="floatingPassword">Пароль</label>
         </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>

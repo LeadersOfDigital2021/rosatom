@@ -1,14 +1,15 @@
+$(document).ready(function () {
+    $('.goTostr').on('click', function () {
+        var block_text = $(this).attr('data-name');
+        $('a[name=' + block_text + ']').delay(100).fadeOut().fadeIn('slow').fadeOut().fadeIn('slow')
 
-var $textArea = $(".textarea-container");
+    });
+    $('.play-audio-btn').on('click', function () {
+        const start_time = $(this).data('start-time')
+        const end_time = $(this).data('end-time')
 
-// Re-size to fit initial content.
-resizeTextArea($textArea);
-
-// Remove this binding if you don't want to re-size on typing.
-$textArea.off("keyup.textarea").on("keyup.textarea", function() {
-    resizeTextArea($(this));
+        let player = $("#audio_player")
+        console.log(player)
+        player[0].play();
+    });
 });
-
-function resizeTextArea($element) {
-    $element.height($element[0].scrollHeight);
-}

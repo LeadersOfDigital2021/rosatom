@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 
 {% block main %}
+
 <main>
     <div class="container pt-3">
         <div class="row">
@@ -19,14 +20,17 @@
                     <tr id="protocol_{{ meeting.id }}" data-id={{ meeting.id }} class="protocol_item">
                         <td class="date-table">{{ meeting.date }}</td>
                         <td>{{ meeting.theme }}</td>
-                        <td>{% if meeting.status == 0 %}
-                            <span class="status_check text-center d-block">Проверка</span>
-                            {% endif %}
-                            {% if meeting.status == 1 %}
-                            <span class="status_ready text-center d-block">Готово</span>
+                        <td>{% if meeting.status <= 1 %}
+                            <span class="status_check text-center d-block">{{ meeting.get_status_display }}</span>
                             {% endif %}
                             {% if meeting.status == 2 %}
-                            <span class="status_sogl text-center d-block">На согласовании</span>
+                            <span class="status_ready text-center d-block">{{ meeting.get_status_display }}</span>
+                            {% endif %}
+                            {% if meeting.status == 3 %}
+                            <span class="status_sogl text-center d-block">{{ meeting.get_status_display }}</span>
+                            {% endif %}
+                            {% if meeting.status == 4 %}
+                            <span class="status_sogl text-center d-block">{{ meeting.get_status_display }}</span>
                             {% endif %}
                         </td>
                     </tr>
@@ -43,11 +47,11 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <a href=""
-                                           class="d-block text-decoration-none disabled-btn btn btn-light"  id="view"><i
+                                           class="d-block text-decoration-none disabled-btn btn btn-light" id="view"><i
                                                 class="fas fa-money-check"></i> Просмотр </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="" class="d-block text-decoration-none btn btn-light"  id="print"><i
+                                        <a href="" class="d-block text-decoration-none btn btn-light" id="print"><i
                                                 class="fas fa-print"></i> Распечатать</a>
                                     </div>
                                 </div>
@@ -56,13 +60,15 @@
                             <div class="col-12 mt-3">
                                 <div class="row">
                                     <div class="col-6">
-                                       
-                                        <a href="" data-bs-toggle="modal" data-bs-target="#sendProtocolModal" class="d-block text-decoration-none btn btn-light">
+
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#sendProtocolModal"
+                                           class="d-block text-decoration-none btn btn-light">
                                             <i class="far fa-paper-plane"></i> Участникам
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="" data-bs-toggle="modal" data-bs-target="#sendEmailModal" class="d-block text-decoration-none btn btn-light"><i
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#sendEmailModal"
+                                           class="d-block text-decoration-none btn btn-light"><i
                                                 class="far fa-paper-plane"></i> По email</a>
                                     </div>
                                 </div>
@@ -84,26 +90,34 @@
                                         {{ meeting.theme }}
                                     </li>
 
-                                    <li><span class="info_block_title d-block mt-2">Повестка: </span>{{ meeting.agenda }}
+                                    <li><span class="info_block_title d-block mt-2">Повестка: </span>{{ meeting.agenda
+                                        }}
                                     </li>
                                     <li>
                                         <span class="info_block_title d-block mt-2">Участники:</span>
                                         <ul class="list-unstyled mt-2">
                                             {% for user in meeting.roles_in_meeting.all %}
-                                            {% if user.role.name == "Председательствующий" %}
+                                            {% if user.role == 2 %}
                                             <li>
-                                                {{ user.role }} – {{ user.employee.get_short_name }}
+                                                {{ user.get_role_display }} – {{ user.employee.get_short_name }}
                                             </li>
                                             {% endif %}
-                                            {% if user.role.name == "Секретарь" %}
+                                            {% if user.role == 1 %}
                                             <li>
-                                                {{ user.role }} – {{ user.employee.get_short_name }}
+                                                {{ user.get_role_display }} – {{ user.employee.get_short_name }}
                                             </li>
                                             {% endif %}
                                             {% endfor %}
                                             <li class="item-unstl mt-2">Присутствовали</li>
                                             {% for user in meeting.roles_in_meeting.all %}
-                                            <li>{{ user.employee.get_short_name }} - {{ user.employee.place }};</li>
+                                            <li>
+                                                {% if user.report_read %}
+                                                <i class="fas fa-envelope-open-text"></i>
+                                                {% elif user.report_send %}
+                                                <i class="fas fa-envelope"></i>
+                                                {% endif %}
+                                                {{ user.employee.get_short_name }} - {{ user.employee.place }};
+                                            </li>
                                             {% endfor %}
                                         </ul>
                                     </li>
