@@ -89,8 +89,8 @@
                                 {% for user_role in meeting.roles_in_meeting.all %}
                                 <div class="col-12">
                                     <div class="label-control d-flex justify-content-between">
-                                        <label for="peopleNumber{{ forloop.counter  }}" class="form-label">Участник №{{
-                                            forloop.counter }}</label>
+                                        <label for="peopleNumber{{ forloop.counter  }}" class="form-label">Участник №
+                                            {{ forloop.counter }}</label>
                                         <div class="control-member">
                                             <a href="#"><i class="fas fa-user-slash grey"></i></a>
                                             <a href="#" class="btn-edit"

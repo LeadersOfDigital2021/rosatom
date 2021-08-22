@@ -69,9 +69,13 @@ class MeetingDetailView(LoginRequiredMixin, View):
 class MeetingSend(LoginRequiredMixin, View):
     def get(self, request, meeting_id):
         # эмуляция отрпавки писем
-        roles_meeting = Meeting.objects.get(pk=meeting_id).roles_in_meeting.all()
+        meeting = Meeting.objects.get(pk=meeting_id)
+        meeting.status = 3
+        meeting.save()
+        roles_meeting = meeting.roles_in_meeting.all()
         for role in roles_meeting:
             role.report_send = True;
+
             role.save()
         return redirect('main')
 
