@@ -4,8 +4,6 @@ from .views import AutenticationView, MainView, MeetingSend, MeetingPrintView, M
 from django.conf import settings
 from django.conf.urls.static import static
 
-handler404 = "core.views.page_not_found_view"
-
 urlpatterns = [
     path('', MainView.as_view(), name='main'),
     path('auth', AutenticationView.as_view(), name='auth'),
